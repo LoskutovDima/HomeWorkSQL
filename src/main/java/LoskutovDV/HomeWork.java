@@ -24,13 +24,13 @@ public class HomeWork {
             "('Барочкин Василий Петрович'), ('Качанов Дмитрий Анатольевич'), ('Лебедев Эдуард Аркадьевич')";
     private static final String INSERT_INTO_GROUPP_TABLE = "INSERT INTO Groupa(name, id_curator) VALUES ('Робототехника', '1' ),('Программирование','2'),('Тестирование','3')";
 
-    private static final String GET_INFO_FOR_STUDENT_AND_NAME_GROUP = "SELECT student.id, student.fio, groupa.name, curator.fio FROM mydb.student" +
-            " JOIN mydb.groupa ON mydb.student.id_group = mydb.groupa.id JOIN mydb.curator ON mydb.groupa.id_curator = mydb.curator.id";
-    private static final String GET_NUMBER_STUDENT = "SELECT COUNT(id) FROM mydb.student";
-    private static final String GET_MALE_STUDENT = "SELECT id, fio, sex FROM mydb.student WHERE sex = 'ж'";
+    private static final String GET_INFO_FOR_STUDENT_AND_NAME_GROUP = "SELECT student.id, student.fio, groupa.name, curator.fio FROM Student" +
+            " JOIN Groupa ON Student.id_group = Groupa.id JOIN Curator ON Groupa.id_curator = Curator.id";
+    private static final String GET_NUMBER_STUDENT = "SELECT COUNT(id) FROM Student";
+    private static final String GET_MALE_STUDENT = "SELECT id, fio, sex FROM Student WHERE sex = 'ж'";
     private static final String UPDATE_GROUPA_TABLE = "UPDATE Groupa SET id_curator = '4' WHERE id_curator = '3'";
-    private static final String GET_LIST_GRUOPA_AND_NAME_CURATOR = "SELECT mydb.groupa.id,mydb.groupa.name,mydb.curator.fio FROM mydb.groupa JOIN mydb.curator " +
-            "ON mydb.groupa.id_curator = mydb.curator.id";
+    private static final String GET_LIST_GRUOPA_AND_NAME_CURATOR = "SELECT groupa.id,groupa.name,curator.fio FROM Groupa JOIN Curator " +
+            "ON Groupa.id_curator = Curator.id";
 
     public  void  createStudentTable(Connection connection) throws SQLException {
         try(Statement statement = connection.createStatement()) {
@@ -48,26 +48,26 @@ public class HomeWork {
                 statement.execute(CREATE_GROUPP_TABLE);
             }
         }
-        public void InsertIntoDataStudent(Connection connection) throws SQLException {
+        public void insertIntoDataStudent(Connection connection) throws SQLException {
         try (Statement statement = connection.prepareStatement(INSERT_INTO_STUDENT_TABLE)){
           int row = statement.executeUpdate(INSERT_INTO_STUDENT_TABLE);
             System.out.println("Успешно добавлено " + row + " записей в таблицу Student");
         }
         }
-        public void InsertIntoDataCurator(Connection connection) throws SQLException {
+        public void insertIntoDataCurator(Connection connection) throws SQLException {
         try (Statement statement = connection.prepareStatement(INSERT_INTO_CURATOR_TABLE)) {
             int row = statement.executeUpdate(INSERT_INTO_CURATOR_TABLE);
             System.out.println("Успешно добавлено " + row + " записи в таблицу Curator");
         }
         }
-        public void InsertIntoDataGroupp(Connection connection) throws SQLException {
+        public void insertIntoDataGroupp(Connection connection) throws SQLException {
         try(Statement statement = connection.prepareStatement(INSERT_INTO_GROUPP_TABLE)) {
             int row = statement.executeUpdate(INSERT_INTO_GROUPP_TABLE);
             System.out.println("Успешно добавлено "+ row +" записи в таблицу Groupa");
         }
         }
 
-        public void GetInfoForStudent(Connection connection) throws SQLException {
+        public void getInfoForStudent(Connection connection) throws SQLException {
         try(Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(GET_INFO_FOR_STUDENT_AND_NAME_GROUP);
             while (resultSet.next()) {
@@ -81,7 +81,7 @@ public class HomeWork {
 
         }
         }
-        public void GetNumberStudent(Connection connection) throws SQLException {
+        public void getNumberStudent(Connection connection) throws SQLException {
         try(Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(GET_NUMBER_STUDENT);
             while (resultSet.next()) {
@@ -91,7 +91,7 @@ public class HomeWork {
             }
         }
         }
-        public void GetMaleStudent(Connection connection) throws SQLException {
+        public void getMaleStudent(Connection connection) throws SQLException {
         try(Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(GET_MALE_STUDENT);
             while (resultSet.next()) {
@@ -103,13 +103,13 @@ public class HomeWork {
             }
         }
         }
-        public void UpdateGroupaTable(Connection connection) throws SQLException {
+        public void updateGroupaTable(Connection connection) throws SQLException {
         try(Statement statement = connection.createStatement()) {
             statement.executeUpdate(UPDATE_GROUPA_TABLE);
             System.out.println("Данные в таблицу Groupa успешно обновлены");
         }
         }
-        public void GetListGroupaAndCuratorName(Connection connection) throws SQLException {
+        public void getListGroupaAndCuratorName(Connection connection) throws SQLException {
         try(Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(GET_LIST_GRUOPA_AND_NAME_CURATOR);
             while (resultSet.next()) {
@@ -128,24 +128,22 @@ public class HomeWork {
 
 
     public static void main(String[] args) throws SQLException {
-        HomeWork homeWorkCreateTable = new HomeWork();
-        HomeWork homeWorkInsertData = new HomeWork();
-        HomeWork homeWorkGetInfo = new HomeWork();
-        HomeWork homeWorkUpdateTable = new HomeWork();
+        HomeWork homeWorkSql = new HomeWork();
+
 
         try(Connection connection = DriverManager.getConnection(CONNECTION_URL,USER,PASSWORD)) {
-        homeWorkCreateTable.createCuratorTable(connection);
-        homeWorkCreateTable.createGrouppTable(connection);
-        homeWorkCreateTable.createStudentTable(connection);
+        homeWorkSql.createCuratorTable(connection);
+        homeWorkSql.createGrouppTable(connection);
+        homeWorkSql.createStudentTable(connection);
         System.out.println("Таблицы успешно созданы");
-        homeWorkInsertData.InsertIntoDataCurator(connection);
-        homeWorkInsertData.InsertIntoDataGroupp(connection);
-        homeWorkInsertData.InsertIntoDataStudent(connection);
-        homeWorkGetInfo.GetInfoForStudent(connection);
-        homeWorkGetInfo.GetNumberStudent(connection);
-        homeWorkGetInfo.GetMaleStudent(connection);
-        homeWorkUpdateTable.UpdateGroupaTable(connection);
-        homeWorkGetInfo.GetListGroupaAndCuratorName(connection);
+        homeWorkSql.insertIntoDataCurator(connection);
+        homeWorkSql.insertIntoDataGroupp(connection);
+        homeWorkSql.insertIntoDataStudent(connection);
+        homeWorkSql.getInfoForStudent(connection);
+        homeWorkSql.getNumberStudent(connection);
+        homeWorkSql.getMaleStudent(connection);
+        homeWorkSql.updateGroupaTable(connection);
+        homeWorkSql.getListGroupaAndCuratorName(connection);
 
 
         }
